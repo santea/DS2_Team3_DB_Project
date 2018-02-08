@@ -58,7 +58,7 @@
         show tables;
     </SHOW_TABLES>
     <DROP_TABLES>
-        drop table CONCERT_HALL, CONCERT, AUDIENCE, RESERVATION;
+        drop table RESERVATION, CONCERT, AUDIENCE, CONCERT_HALL;
     </DROP_TABLES>
     <CREATE_TABLES>
         create table CONCERT_HALL (
