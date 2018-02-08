@@ -42,7 +42,6 @@ def test():
     PrintManager.instance().printError("에러는 이렇게 출력하세요")
 
 
-
 # 1번 선택 시
 def print_all_buildings():
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL)
@@ -71,8 +70,9 @@ def insert_a_new_building():
     except TypeError:
         PrintManager.instance().printError("Please Input number (capacity)")
         return
-    DBController.instance().excuteQuery(QUERY.INSERT_CONCERT_HALL, name, loc, cap)
-    print("A building is successfully inserted")
+
+    if DBController.instance().excuteQuery(QUERY.INSERT_CONCERT_HALL, name, loc, cap) == 1:
+        print("A building is successfully inserted")
 
 
 # 5번 선택 시
@@ -96,15 +96,15 @@ def insert_a_new_performance():
     except TypeError:
         PrintManager.instance().printError("Please Input number (price)")
         return
-    re = DBController.instance().excuteQuery(QUERY.INSERT_CONCERT, name, typ, price)
-    print(re)
+    if DBController.instance().excuteQuery(QUERY.INSERT_CONCERT, name, typ, price) == 1:
+        print("A performance is successfully inserted")
 
 
 # 7번 선택 시
 def remove_a_performance():
     id = input("Performance ID: ")
-    re = DBController.instance().excuteQuery(QUERY.DELETE_CONCERT, id)
-    print(re)
+    if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT, id) == 1:
+        print("A performance is successfully removed")
 
 
 # 8번 선택 시
@@ -121,23 +121,23 @@ def insert_a_new_audience():
     except TypeError:
         PrintManager.instance().printError("Please input number (price)")
         return
-    re = DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, price)
-    print(re)
+    if DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, price) == 1:
+        print("A audience is successfully inserted")
 
 
 # 9번 선택 시
 def remove_an_audience():
     id = input("Audience ID: ")
-    re = DBController.instance().excuteQuery(QUERY.DELETE_AUDIENCE, id)
-    print(re)
+    if DBController.instance().excuteQuery(QUERY.DELETE_AUDIENCE, id) == 1:
+        print("A audience is successfully removed")
 
 
 # 10번 선택 시
 def assign_a_performance_to_a_building():
     bId = input("Building ID: ")
     pId = input("Performance ID: ")
-    re = DBController.instance().excuteQuery(QUERY.UPDATE_PCONCERT, bId, pId)
-    print(re)
+    if DBController.instance().excuteQuery(QUERY.UPDATE_PCONCERT, bId, pId) == 2:
+        print("A performance is successfully assigned")
 
 
 # 11번 선택 시

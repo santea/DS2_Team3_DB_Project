@@ -1,15 +1,15 @@
 <query date="20180207">
     <SELECT_CONCERT_HALL>
-        select CONCERT_HALL.ID, CONCERT_HALL.NAME, LOCATION, CAPACITY, count(*) as ASSIGNED
-        from CONCERT_HALL left outer join CONCERT on(CONCERT_HALL.ID = CONCERT.CONCERT_HALL_ID)
-        group by CONCERT_HALL.ID, CONCERT_HALL.NAME, LOCATION, CAPACITY
-        order by CONCERT_HALL.ID
+        select ID, NAME, LOCATION, CAPACITY, (select count(*)
+                                              from CONCERT
+                                              where CONCERT.CONCERT_HALL_ID = HALL.ID) as ASSIGNED
+        from CONCERT_HALL as HALL
     </SELECT_CONCERT_HALL>
     <SELECT_CONCERT>
-        select distinct CONCERT.ID, CONCERT.NAME, TYPE, PRICE, count(*) as BOOKED
-        from CONCERT, RESERVATION
-        where CONCERT.ID = RESERVATION.CONCERT_ID
-        group by CONCERT.ID, CONCERT.NAME, TYPE, PRICE
+        select ID, NAME, TYPE, PRICE, (select count(*)
+                                       from RESERVATION
+                                       where CONCERT_ID = C.ID) as BOOKED
+        from CONCERT AS C
         order by ID
     </SELECT_CONCERT>
     <SELECT_CONCERT_HALL_BY_ID>
