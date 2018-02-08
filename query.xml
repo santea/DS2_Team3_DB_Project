@@ -1,24 +1,37 @@
 <query date="20180207">
     <SELECT_CONCERT_HALL>
-        select distinct CONCERT_HALL.ID, NAME, LOCATION, CAPACITY, count(*) as ASSIGNED
-        from CONCERT_HALL, CONCERT
-        where CONCERT_HALL.ID = CONCERT.CONCERT_HALL_ID
-        order by ID
+        select CONCERT_HALL.ID, CONCERT_HALL.NAME, LOCATION, CAPACITY, count(*) as ASSIGNED
+        from CONCERT_HALL left outer join CONCERT on(CONCERT_HALL.ID = CONCERT.CONCERT_HALL_ID)
+        group by CONCERT_HALL.ID, CONCERT_HALL.NAME, LOCATION, CAPACITY
+        order by CONCERT_HALL.ID
     </SELECT_CONCERT_HALL>
     <SELECT_CONCERT>
-        select distinct ID, NAME, TYPE, PRICE, count(*) as BOOKED
+        select distinct CONCERT.ID, CONCERT.NAME, TYPE, PRICE, count(*) as BOOKED
         from CONCERT, RESERVATION
         where CONCERT.ID = RESERVATION.CONCERT_ID
+        group by CONCERT.ID, CONCERT.NAME, TYPE, PRICE
         order by ID
     </SELECT_CONCERT>
+    <SELECT_CONCERT_HALL_BY_ID>
+        select *
+        from CONCERT_HALL
+        where ID = '%s'
+    </SELECT_CONCERT_HALL_BY_ID>
     <SELECT_AUDIENCES>
-        select ID, NAME, GENDER, AGE from AUDIENCE order by ID
+        select ID, NAME, GENDER, AGE
+        from AUDIENCE
+        order by ID
     </SELECT_AUDIENCES>
-    <INSERT_CONCERT_HALL>
+    <DELETE_CONCERT>
         select 1
+    </DELETE_CONCERT>
+    <INSERT_CONCERT_HALL>
+        insert into CONCERT_HALL (NAME, LOCATION, CAPACITY)
+        values ('%s', '%s', %s)
     </INSERT_CONCERT_HALL>
     <DELETE_CONCERT_HALL>
-        select 1
+        delete from CONCERT_HALL
+        where ID = '%s'
     </DELETE_CONCERT_HALL>
     <INSERT_CONCERT>
         select 1
@@ -29,12 +42,18 @@
     <INSERT_AUDIENCE>
         select 1
     </INSERT_AUDIENCE>
+    <DELETE_AUDIENCE>
+        select 1
+    </DELETE_AUDIENCE>
     <UPDATE_PCONCERT>
         select 1
     </UPDATE_PCONCERT>
     <SELECT_PERFORMANCE>
         select * from CONCERT_HALL where ID='%s' and 1 = %s
     </SELECT_PERFORMANCE>
+    <INSERT_RESERVATION>
+        select 1
+    </INSERT_RESERVATION>
     <DROP_TEST>
         drop table RESERVATION, CONCERT, AUDIENCE, CONCERT_HALL;
     </DROP_TEST>

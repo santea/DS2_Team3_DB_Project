@@ -39,7 +39,7 @@ class PrintManager:
 
     # 쿼리한 결과를 테이블 형태로 출력 (Dic이 리스트로 되어있는 자료형)
     def printTable(self, obj):
-        if obj is None:
+        if obj is None or len(obj) == 0:
             self.printError("결과가 없습니다.")
         elif len(obj) > 0:
             # table 헤더 설정

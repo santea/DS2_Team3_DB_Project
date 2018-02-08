@@ -50,19 +50,17 @@ class DBController:
                 if IS_DEBUG_MODE:
                     print("query >", sql)
 
-                if len(splitSql) == 1:
-                    cursor.execute(sql)
+                for i in range(len(splitSql)):
+                    if splitSql[i].strip() == "":
+                        break
+                    cursor.execute(splitSql[i])
                     result = cursor.fetchall()
-                else:
-                    for i in range(len(splitSql)):
-                        if splitSql[i].strip() == "":
-                            break
-
-                        cursor.execute(splitSql[i])
-                        result = cursor.fetchall()
 
                 if IS_DEBUG_MODE:
                     print("result >", result)
+
+                if 'update' in splitSql[0] or 'insert' in splitSql[0] or 'delete' in splitSql[0]:
+                    connection.commit()
         except Exception as e:
             PrintManager.instance().printExcept(e)
         finally:
