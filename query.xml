@@ -8,7 +8,7 @@
     <SELECT_CONCERT>
         select ID, NAME, TYPE, PRICE, (select count(*)
                                        from RESERVATION
-                                       where CONCERT_ID = C.ID) as BOOKED
+                                       where CONCERT_ID = C.ID and RESERVATION_YN = 'Y') as BOOKED
         from CONCERT AS C
         order by ID
     </SELECT_CONCERT>
