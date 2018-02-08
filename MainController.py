@@ -28,7 +28,7 @@ def test():
     
     print()
     # 파라미터가 0개인 쿼리 수행  query.xml의  SELECT_BUILDING 참고
-    re = DBController.instance().excuteQuery(QUERY.SELECT_BUILDING)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT)
     # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
     PrintManager.instance().printTable(re)
 
@@ -45,7 +45,7 @@ def test():
 
 # 1번 선택 시
 def print_all_buildings():
-    re = DBController.instance().excuteQuery(QUERY.SELECT_BUILDING)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL)
     PrintManager.instance().printTable(re)
     return None
 
@@ -123,6 +123,7 @@ def exit():
 
 # 16번 선택 시 : 데이터베이스 리셋 및 생성
 def reset_database():
+    DBController.instance().excuteQuery(QUERY.DROP_TEST)
     DBController.instance().excuteQuery(QUERY.CREATE_TABLES)
     return None
 

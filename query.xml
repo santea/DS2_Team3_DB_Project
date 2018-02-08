@@ -8,7 +8,15 @@
     <DELETE_CONCERT>select 1</DELETE_CONCERT>
     <INSERT_AUDIENCE>select 1</INSERT_AUDIENCE>
     <UPDATE_PCONCERT>select 1</UPDATE_PCONCERT>
-    <CREATE_TABLES>create table CONCERT_HALL (
+    <SELECT_PERFORMANCE></SELECT_PERFORMANCE>
+    <DROP_TEST>
+        drop table CONCERT_HALL;
+        drop table CONCERT;
+        drop table RESERVATION;
+        drop table AUDIENCE;
+    </DROP_TEST>
+    <CREATE_TABLES>
+        create table CONCERT_HALL (
         ID INT UNSIGNED AUTO_INCREMENT,
         NAME VARCHAR(200) NOT NULL,
         LOCATION VARCHAR(200) NOT NULL,
@@ -41,7 +49,6 @@
         GENDER VARCHAR(1) NOT NULL,
         AGE INT UNSIGNED CHECK (AGE > 0),
         PRIMARY KEY(ID)
-
         );
     </CREATE_TABLES>
 </query>
