@@ -34,9 +34,9 @@ def test():
 
     print()
     # 파라미터가 2개인 쿼리 수행  query.xml의  SELECT_PERFORMANCE 참고
-    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT, '1', 1)
+    #re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT, '1', 1)
     # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
-    PrintManager.printTable(re)
+    #PrintManager.printTable(re)
 
     # 에러 출력 예시
     PrintManager.printError("에러는 이렇게 출력하세요")
@@ -153,13 +153,18 @@ def print_ticket_booking_status_of_a_performance():
 
 # 15번 선택 시 : 프로그램 종료
 def exit():
-    print("Bye!!!")
+    print("Bye!")
     sys.exit()
 
 
 # 16번 선택 시 : 데이터베이스 리셋 및 생성
 def reset_database():
-    DBController.instance().excuteQuery(QUERY.DROP_TEST)
-    DBController.instance().excuteQuery(QUERY.CREATE_TABLES)
+    reset = PrintManager.input("Do you really want to reset database? : ")
+    if reset.lower() == 'y':
+        if DBController.instance().excuteQuery(QUERY.SHOW_TABLES) > 0:
+            DBController.instance().excuteQuery(QUERY.DROP_TABLES)
+
+        DBController.instance().excuteQuery(QUERY.CREATE_TABLES)
+        print("Database is successfully reset")
     return None
 

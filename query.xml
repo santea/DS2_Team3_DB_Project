@@ -49,9 +49,17 @@
     <INSERT_RESERVATION>
         select 1
     </INSERT_RESERVATION>
-    <DROP_TEST>
-        drop table RESERVATION, CONCERT, AUDIENCE, CONCERT_HALL;
-    </DROP_TEST>
+    <SELECT_CONCERT_HALL_BY_ID>
+        select *
+        from CONCERT_HALL
+        where ID = '%s'
+    </SELECT_CONCERT_HALL_BY_ID>
+    <SHOW_TABLES>
+        show tables;
+    </SHOW_TABLES>
+    <DROP_TABLES>
+        drop table CONCERT_HALL, CONCERT, AUDIENCE, RESERVATION;
+    </DROP_TABLES>
     <CREATE_TABLES>
         create table CONCERT_HALL (
         ID INT UNSIGNED AUTO_INCREMENT,

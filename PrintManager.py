@@ -32,7 +32,7 @@ class PrintManager:
     @classmethod
     def printTable(self, obj):
         if obj is None or len(obj) == 0:
-            self.printError("결과가 없습니다.")
+            self.printError("No result")
         elif len(obj) > 0:
             # table 헤더 설정
             table = PrettyTable(list(obj[0].keys()))

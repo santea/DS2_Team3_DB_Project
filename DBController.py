@@ -59,6 +59,8 @@ class DBController:
                     if "insert" in splitSql[i] or "update" in splitSql[i] or "delete" in splitSql[i]:
                         # insert update delete 쿼리는 수행후 row count 리턴
                         result = cursor.rowcount
+                    elif "show" in splitSql[i]:
+                        result = cursor.rowcount
                     else:
                         # select 는 결과 리턴
                         result = cursor.fetchall()
@@ -77,6 +79,6 @@ class DBController:
         query = tree.getroot()
         element = query.find(queryType.name)
         if element is None or element.text == "":
-            PrintManager.printError(queryType.name + "를 query.xml 파일에서 찾지 못함 확인해주세요")
+            PrintManager.printError("Can not find " + queryType.name + " from query.xml")
             return None
         return element.text
