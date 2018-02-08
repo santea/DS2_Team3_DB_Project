@@ -1,6 +1,6 @@
 import sys
 from DBController import DBController
-from Constant import QUERY
+from Constant import QUERY, INPUT_TYPE
 from PrintManager import PrintManager
 
 
@@ -30,138 +30,110 @@ def test():
     # 파라미터가 0개인 쿼리 수행  query.xml의  SELECT_BUILDING 참고
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL)
     # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
-    PrintManager.instance().printTable(re)
+    PrintManager.printTable(re)
 
     print()
     # 파라미터가 2개인 쿼리 수행  query.xml의  SELECT_PERFORMANCE 참고
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT, '1', 1)
     # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
-    PrintManager.instance().printTable(re)
+    PrintManager.printTable(re)
 
     # 에러 출력 예시
-    PrintManager.instance().printError("에러는 이렇게 출력하세요")
-
+    PrintManager.printError("에러는 이렇게 출력하세요")
 
 
 # 1번 선택 시
 def print_all_buildings():
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL)
-    PrintManager.instance().printTable(re)
+    PrintManager.printTable(re)
 
 
 # 2번 선택 시
 def print_all_performances():
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT)
-    PrintManager.instance().printTable(re)
+    PrintManager.printTable(re)
 
 
 # 3번 선택 시
 def print_all_audiences():
     re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCES)
-    PrintManager.instance().printTable(re)
+    PrintManager.printTable(re)
 
 
 # 4번 선택 시
 def insert_a_new_building():
-    name = input("Building name: ")
-    loc = input("Building location: ")
-    cap = input("Building capacity: ")
-    try:
-        cap = int(cap)
-    except TypeError:
-        PrintManager.instance().printError("Please Input number (capacity)")
-        return
-    DBController.instance().excuteQuery(QUERY.INSERT_CONCERT_HALL, name, loc, cap)
-    print("A building is successfully inserted")
+    name = PrintManager.input("Building name: ")
+    loc = PrintManager.input("Building location: ")
+    cap = PrintManager.input("Building capacity: ", inputType=INPUT_TYPE.INT)
+
+    if DBController.instance().excuteQuery(QUERY.INSERT_CONCERT_HALL, name, loc, cap) == 1:
+        print("A building is successfully inserted")
 
 
 # 5번 선택 시
 def remove_a_building():
-    id = input("ConcertHall ID: ")
+    id = PrintManager.input("Buinding ID: ")
 
-    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_CONCERTHALL_ID, id)
-    if len(re) == 0:
-        PrintManager.instance().printError("Not Exist ConcertHall (" + id + ")")
+    if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT_HALL, id) == 0:
+        PrintManager.printError("Not Exist ConcertHall (" + id + ")")
     else:
-        re = DBController.instance().excuteQuery(QUERY.DELETE_CONCERT_HALL, id)
+        print("A building is successfully removed")
 
 
 # 6번 선택 시
 def insert_a_new_performance():
-    name = input("Performance name: ")
-    typ = input("Performance type: ")
-    price = input("Performance price: ")
-    try:
-        price = int(price)
-    except TypeError:
-        PrintManager.instance().printError("Please Input number (price)")
-        return
-    re = DBController.instance().excuteQuery(QUERY.INSERT_CONCERT, name, typ, price)
-    print(re)
+    name = PrintManager.input("Performance name: ")
+    typ = PrintManager.input("Performance type: ")
+    price = PrintManager.input("Performance price: ", inputType=INPUT_TYPE.INT)
+    if DBController.instance().excuteQuery(QUERY.INSERT_CONCERT, name, typ, price) == 1:
+        print("A performance is successfully inserted")
 
 
 # 7번 선택 시
 def remove_a_performance():
-    id = input("Performance ID: ")
-    re = DBController.instance().excuteQuery(QUERY.DELETE_CONCERT, id)
-    print(re)
+    id = PrintManager.input("Performance ID: ")
+    if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT, id) == 0:
+        PrintManager.printError("Not Exist Performance (" + id + ")")
+    else:
+        print("A performance is successfully removed")
 
 
 # 8번 선택 시
 def insert_a_new_audience():
-    name = input("Audience name: ")
-    gender = input("Audience gender: ")
-    if gender != 'M' or gender != 'F':
-        PrintManager.instance().printError("Please input 'M' or 'F' gender")
-        return
-
-    price = input("Audience age: ")
-    try:
-        price = int(price)
-    except TypeError:
-        PrintManager.instance().printError("Please input number (price)")
-        return
-    re = DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, price)
-    print(re)
+    name = PrintManager.input("Audience name: ")
+    gender = PrintManager.input("Audience gender: ", inputType=INPUT_TYPE.GENDER)
+    price = PrintManager.input("Audience age: ", INPUT_TYPE.INT)
+    if DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, price) == 1:
+        print("A audience is successfully inserted")
 
 
 # 9번 선택 시
 def remove_an_audience():
-    id = input("Audience ID: ")
-    re = DBController.instance().excuteQuery(QUERY.DELETE_AUDIENCE, id)
-    print(re)
+    id = PrintManager.input("Audience ID: ")
+    if DBController.instance().excuteQuery(QUERY.DELETE_AUDIENCE, id) == 0:
+        PrintManager.printError("Not Exist audience (" + id + ")")
+    else:
+        print("A audience is successfully removed")
 
 
 # 10번 선택 시
 def assign_a_performance_to_a_building():
-    bId = input("Building ID: ")
-    pId = input("Performance ID: ")
-    re = DBController.instance().excuteQuery(QUERY.UPDATE_PCONCERT, bId, pId)
-    print(re)
+    bId = PrintManager.input("Building ID: ")
+    pId = PrintManager.input("Performance ID: ")
+    if DBController.instance().excuteQuery(QUERY.UPDATE_PCONCERT, bId, pId) == 2:
+        print("A performance is successfully assigned")
 
 
 # 11번 선택 시
 def book_a_performance():
-    pId = input("Performance ID: ")
-    aId = input("Audience ID: ")
-    seat = input("seat number: ")
-    splitSeat = seat.split(",")
+    pId = PrintManager.input("Performance ID: ")
+    aId = PrintManager.input("Audience ID: ")
+    splitSeat = PrintManager.input("seat number: ", INPUT_TYPE.SEAT)
 
-    if len(splitSeat) == 1:
-        try:
-            seatNum = int(seat)
-            re = DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, aId, seatNum)
-        except TypeError:
-            PrintManager.instance().printError("Please input number (seat number)")
-            return
-    else:
-        for i in range(len(splitSeat)):
-            try:
-                seatNum = int(splitSeat[i].replace(" ", ""))
-                re = DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, aId, seatNum)
-            except TypeError:
-                PrintManager.instance().printError("Please input number (seat number)")
-                return
+    #자리 있는지 검사하는 부분 들어가야함
+
+    for i in range(len(splitSeat)):
+        DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, aId, splitSeat[i])
 
 
 # 12번 선택 시

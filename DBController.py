@@ -31,7 +31,7 @@ class DBController:
                                   autocommit=True,
                                   cursorclass=pymysql.cursors.DictCursor)
         except Exception as e:
-            PrintManager.instance().printExcept(e)
+            PrintManager.printExcept(e)
 
         return con
 
@@ -66,7 +66,7 @@ class DBController:
                 if IS_DEBUG_MODE:
                     print("result >", result)
         except Exception as e:
-            PrintManager.instance().printExcept(e)
+            PrintManager.printExcept(e)
         finally:
             connection.close()
 
@@ -77,6 +77,6 @@ class DBController:
         query = tree.getroot()
         element = query.find(queryType.name)
         if element is None or element.text == "":
-            PrintManager.instance().printError(queryType.name + "를 query.xml 파일에서 찾지 못함 확인해주세요")
+            PrintManager.printError(queryType.name + "를 query.xml 파일에서 찾지 못함 확인해주세요")
             return None
         return element.text

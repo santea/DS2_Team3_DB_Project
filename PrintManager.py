@@ -2,30 +2,21 @@ import MainController
 import sys, os
 from prettytable import PrettyTable
 from colorama import Fore, Style
+from Constant import INPUT_TYPE
 
 
 class PrintManager:
-    __instance = None
-
-    @classmethod
-    def __getInstance(cls):
-        return cls.__instance
-
-    @classmethod
-    def instance(cls, *args, **kargs):
-        cls.__instance = cls(*args, **kargs)
-        cls.instance = cls.__getInstance
-        return cls.__instance
-
     def __init__(self):
         return None
 
+    @classmethod
     def printMenu(self):
         print("============================================================")
         for i in range(len(MainController.MENU_STRING)):
             print(str(i + 1) + ". " + MainController.MENU_STRING[i])
         print("============================================================")
 
+    @classmethod
     def getMenuInput(self):
         inTxt = input("\nSelect your action: ")
         try:
@@ -38,6 +29,7 @@ class PrintManager:
         return inNum
 
     # 쿼리한 결과를 테이블 형태로 출력 (Dic이 리스트로 되어있는 자료형)
+    @classmethod
     def printTable(self, obj):
         if obj is None or len(obj) == 0:
             self.printError("결과가 없습니다.")
@@ -55,11 +47,47 @@ class PrintManager:
             print(table, f"{Style.RESET_ALL}")
 
     # Except 발생시 정보 출력
+    @classmethod
     def printExcept(self, e):
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
 
         print(f"{Fore.RED}[Error] " + fname + " (line : " + str(exc_tb.tb_lineno) + ") : ", e, f"{Style.RESET_ALL}")
 
+    @classmethod
     def printError(self, msg):
         print(f"{Fore.RED}[Error] " + msg + f"{Style.RESET_ALL}")
+
+    @classmethod
+    def input(self, text, maxLen=200, inputType=INPUT_TYPE.STR):
+        if inputType == INPUT_TYPE.STR:
+            inStr = input(text)
+            if maxLen <= len(inStr):
+                raise ValueError("Over Input Size | max Len :", maxLen, ", input :", len(inStr))
+            else:
+                return inStr
+        elif inputType == INPUT_TYPE.INT:
+            inStr = input(text)
+            try:
+                inInt = int(inStr)
+                return inInt
+            except ValueError:
+                raise ValueError("Please input integer Value")
+        elif inputType == INPUT_TYPE.GENDER:
+            inStr = input(text)
+            if inStr != 'M' or inStr != 'F':
+                raise ValueError("Please input 'M' or 'F'")
+            else:
+                return inStr
+        elif inputType == INPUT_TYPE.SEAT:
+            inStr = input(text)
+            splitStr = inStr.split(",")
+            splitStr = splitStr.strip()
+            for item in splitStr:
+                try:
+                    int(item)
+                except ValueError:
+                    raise ValueError("Please input integer Value (Seat Num)")
+            return splitStr
+
+        return None
