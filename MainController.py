@@ -28,13 +28,13 @@ def test():
     
     print()
     # 파라미터가 0개인 쿼리 수행  query.xml의  SELECT_BUILDING 참고
-    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL)
     # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
     PrintManager.instance().printTable(re)
 
     print()
     # 파라미터가 2개인 쿼리 수행  query.xml의  SELECT_PERFORMANCE 참고
-    re = DBController.instance().excuteQuery(QUERY.SELECT_PERFORMANCE, '1', 1)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT, '1', 1)
     # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
     PrintManager.instance().printTable(re)
 
