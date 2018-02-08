@@ -32,7 +32,7 @@ class PrintManager:
     @classmethod
     def printTable(self, obj):
         if obj is None or len(obj) == 0:
-            self.printError("No result")
+            self.printError("결과가 없습니다.")
         elif len(obj) > 0:
             # table 헤더 설정
             table = PrettyTable(list(obj[0].keys()))
@@ -63,7 +63,7 @@ class PrintManager:
         if inputType == INPUT_TYPE.STR:
             inStr = input(text)
             if maxLen <= len(inStr):
-                raise ValueError("Input size error | max :", maxLen, ", input :", len(inStr))
+                raise ValueError("Input size error | max :" + str(maxLen) + ", input :" + str(len(inStr)))
             else:
                 return inStr
         elif inputType == INPUT_TYPE.INT:
@@ -72,10 +72,10 @@ class PrintManager:
                 inInt = int(inStr)
                 return inInt
             except ValueError:
-                raise ValueError("Please input integer value")
+                raise ValueError("Please input integer Value")
         elif inputType == INPUT_TYPE.GENDER:
             inStr = input(text)
-            if inStr != 'M' and inStr != 'F':
+            if inStr != 'M' or inStr != 'F':
                 raise ValueError("Please input 'M' or 'F'")
             else:
                 return inStr
@@ -87,7 +87,7 @@ class PrintManager:
                 try:
                     int(item)
                 except ValueError:
-                    raise ValueError("Please input integer value (Seat Num)")
+                    raise ValueError("Please input integer Value (Seat Num)")
             return splitStr
 
         return None
