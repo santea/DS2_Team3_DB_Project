@@ -123,5 +123,6 @@ def exit():
 
 # 16번 선택 시 : 데이터베이스 리셋 및 생성
 def reset_database():
+    DBController.instance().excuteQuery(QUERY.CREATE_TABLES)
     return None
 
