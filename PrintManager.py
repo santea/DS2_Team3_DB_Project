@@ -63,7 +63,7 @@ class PrintManager:
         if inputType == INPUT_TYPE.STR:
             inStr = input(text)
             if maxLen <= len(inStr):
-                raise ValueError("Over Input Size | max Len :", maxLen, ", input :", len(inStr))
+                raise ValueError("Over Input Size (max Len : " + str(maxLen) + ", input : " + str(len(inStr)) + ")")
             else:
                 return inStr
         elif inputType == INPUT_TYPE.INT:
