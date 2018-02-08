@@ -4,6 +4,7 @@
 - pip install pymysql
 - pip install prettytable
 
+### Default dependencies
 - pip install colorama
 - pip install enum
 - pip install xml
