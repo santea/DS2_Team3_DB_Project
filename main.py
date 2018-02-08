@@ -7,6 +7,7 @@ def main():
     PrintManager.instance().printMenu()
 
     # github test111
+    # github test 222
 
     # 참고용 함수
     test()
