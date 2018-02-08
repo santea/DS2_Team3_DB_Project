@@ -21,9 +21,10 @@ class PrintManager:
         return None
 
     def printMenu(self):
-        print("=============================================")
+        print("============================================================")
         for i in range(len(MainController.MENU_STRING)):
-            print(str(i + 1) + "." + MainController.MENU_STRING[i])
+            print(str(i + 1) + ". " + MainController.MENU_STRING[i])
+        print("============================================================")
 
     def getMenuInput(self):
         inTxt = input("\nSelect your action: ")
@@ -32,7 +33,7 @@ class PrintManager:
             if inNum < 1 or inNum > 16:
                 raise ()
         except:
-            self.printError("1~16사이의 숫자만 입력 해 주세요.")
+            self.printError("Select your action between 1 and 16")
             return self.getMenuInput()
         return inNum
 
