@@ -24,9 +24,9 @@ class DBController:
         try:
             con = pymysql.connect(host='147.46.215.246',
                                   port=33060,
-                                  user='santea32@gmail.com',
-                                  password='qwer43qwer!',
-                                  db='db_kimseontae',
+                                  user='akirus82@naver.com',
+                                  password='dbintrodb',
+                                  db='db_kimbyeongsu',
                                   charset='utf8',
                                   cursorclass=pymysql.cursors.DictCursor)
         except Exception as e:
@@ -43,12 +43,24 @@ class DBController:
 
         try:
             with connection.cursor() as cursor:
+
                 sql = self.__readQueryFromXml(queryType) % param
+                splitSql = sql.split(";")
+
                 if IS_DEBUG_MODE:
                     print("query >", sql)
-                cursor.execute(sql)
 
-                result = cursor.fetchall()
+                if len(splitSql) == 1:
+                    cursor.execute(sql)
+                    result = cursor.fetchall()
+                else:
+                    for i in range(len(splitSql)):
+                        if splitSql[i].strip() == "":
+                            break
+
+                        cursor.execute(splitSql[i])
+                        result = cursor.fetchall()
+
                 if IS_DEBUG_MODE:
                     print("result >", result)
         except Exception as e:
