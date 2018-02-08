@@ -65,7 +65,7 @@ def insert_a_new_building():
     name = PrintManager.input("Building name: ")
     loc = PrintManager.input("Building location: ")
     cap = PrintManager.input("Building capacity: ", inputType=INPUT_TYPE.INT)
-
+#11
     if DBController.instance().excuteQuery(QUERY.INSERT_CONCERT_HALL, name, loc, cap) == 1:
         print("A building is successfully inserted")
 
