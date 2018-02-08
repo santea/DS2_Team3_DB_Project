@@ -56,7 +56,7 @@ def print_all_performances():
 
 # 3번 선택 시
 def print_all_audiences():
-    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCES)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE)
     PrintManager.printTable(re)
 
 
@@ -72,10 +72,10 @@ def insert_a_new_building():
 
 # 5번 선택 시
 def remove_a_building():
-    id = PrintManager.input("Buinding ID: ")
+    id = PrintManager.input("Building ID: ")
 
     if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT_HALL, id) == 0:
-        PrintManager.printError("Not Exist ConcertHall (" + id + ")")
+        PrintManager.printError("Not Exist Building (" + id + ")")
     else:
         print("A building is successfully removed")
 
@@ -102,8 +102,8 @@ def remove_a_performance():
 def insert_a_new_audience():
     name = PrintManager.input("Audience name: ")
     gender = PrintManager.input("Audience gender: ", inputType=INPUT_TYPE.GENDER)
-    price = PrintManager.input("Audience age: ", INPUT_TYPE.INT)
-    if DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, price) == 1:
+    age = PrintManager.input("Audience age: ", inputType=INPUT_TYPE.INT)
+    if DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, age) == 1:
         print("A audience is successfully inserted")
 
 
@@ -111,7 +111,7 @@ def insert_a_new_audience():
 def remove_an_audience():
     id = PrintManager.input("Audience ID: ")
     if DBController.instance().excuteQuery(QUERY.DELETE_AUDIENCE, id) == 0:
-        PrintManager.printError("Not Exist audience (" + id + ")")
+        PrintManager.printError("Not Exist Audience (" + id + ")")
     else:
         print("A audience is successfully removed")
 

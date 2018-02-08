@@ -11,19 +11,11 @@
         group by C.ID, C.NAME, C.TYPE, C.PRICE
         order by ID
     </SELECT_CONCERT>
-    <SELECT_CONCERT_HALL_BY_ID>
-        select *
-        from CONCERT_HALL
-        where ID = '%s'
-    </SELECT_CONCERT_HALL_BY_ID>
-    <SELECT_AUDIENCES>
+    <SELECT_AUDIENCE>
         select ID, NAME, GENDER, AGE
         from AUDIENCE
         order by ID
-    </SELECT_AUDIENCES>
-    <DELETE_CONCERT>
-        select 1
-    </DELETE_CONCERT>
+    </SELECT_AUDIENCE>
     <INSERT_CONCERT_HALL>
         insert into CONCERT_HALL (NAME, LOCATION, CAPACITY)
         values ('%s', '%s', %s)
@@ -37,18 +29,20 @@
         values ('%s', '%s', %s)
     </INSERT_CONCERT>
     <DELETE_CONCERT>
-        select 1
+        delete from CONCERT
+        where ID = '%s'
     </DELETE_CONCERT>
     <INSERT_AUDIENCE>
         insert into AUDIENCE (NAME, GENDER, AGE)
         values ('%s', '%s', %s)
     </INSERT_AUDIENCE>
     <DELETE_AUDIENCE>
-        select 1
+        delete from AUDIENCE
+        where ID = '%s'
     </DELETE_AUDIENCE>
-    <UPDATE_PCONCERT>
+    <UPDATE_CONCERT>
         select 1
-    </UPDATE_PCONCERT>
+    </UPDATE_CONCERT>
     <SELECT_PERFORMANCE>
         select * from CONCERT_HALL where ID='%s' and 1 = %s
     </SELECT_PERFORMANCE>
