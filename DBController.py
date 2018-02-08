@@ -28,6 +28,7 @@ class DBController:
                                   password='dbintrodb',
                                   db='db_kimbyeongsu',
                                   charset='utf8',
+                                  autocommit=True,
                                   cursorclass=pymysql.cursors.DictCursor)
         except Exception as e:
             PrintManager.instance().printExcept(e)
@@ -54,17 +55,21 @@ class DBController:
                     if splitSql[i].strip() == "":
                         break
                     cursor.execute(splitSql[i])
-                    result = cursor.fetchall()
+
+                    if "insert" in splitSql[i] or "update" in splitSql[i] or "delete" in splitSql[i]:
+                        # insert update delete 쿼리는 수행후 row count 리턴
+                        result = cursor.rowcount
+                    else:
+                        # select 는 결과 리턴
+                        result = cursor.fetchall()
 
                 if IS_DEBUG_MODE:
                     print("result >", result)
-
-                if 'update' in splitSql[0] or 'insert' in splitSql[0] or 'delete' in splitSql[0]:
-                    connection.commit()
         except Exception as e:
             PrintManager.instance().printExcept(e)
         finally:
             connection.close()
+
         return result
 
     def __readQueryFromXml(self, queryType):

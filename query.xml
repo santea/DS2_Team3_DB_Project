@@ -6,9 +6,10 @@
         order by CONCERT_HALL.ID
     </SELECT_CONCERT_HALL>
     <SELECT_CONCERT>
-        select distinct C.ID, C.NAME, C.TYPE, C.PRICE, (select count(*) from RESERVATION where CONCERT_ID = C.ID and RESERVATION_YN = 'Y') as BOOKED
-        from CONCERT AS C
-        group by C.ID, C.NAME, C.TYPE, C.PRICE
+        select distinct CONCERT.ID, CONCERT.NAME, TYPE, PRICE, count(*) as BOOKED
+        from CONCERT, RESERVATION
+        where CONCERT.ID = RESERVATION.CONCERT_ID
+        group by CONCERT.ID, CONCERT.NAME, TYPE, PRICE
         order by ID
     </SELECT_CONCERT>
     <SELECT_CONCERT_HALL_BY_ID>
@@ -33,15 +34,13 @@
         where ID = '%s'
     </DELETE_CONCERT_HALL>
     <INSERT_CONCERT>
-        insert into CONCERT (NAME, TYPE, PRICE)
-        values ('%s', '%s', %s)
+        select 1
     </INSERT_CONCERT>
     <DELETE_CONCERT>
         select 1
     </DELETE_CONCERT>
     <INSERT_AUDIENCE>
-        insert into AUDIENCE (NAME, GENDER, AGE)
-        values ('%s', '%s', %s)
+        select 1
     </INSERT_AUDIENCE>
     <DELETE_AUDIENCE>
         select 1

@@ -69,7 +69,7 @@ def insert_a_new_building():
     try:
         cap = int(cap)
     except TypeError:
-        PrintManager.instance().printError("Please insert number (capacity)")
+        PrintManager.instance().printError("Please Input number (capacity)")
         return
     DBController.instance().excuteQuery(QUERY.INSERT_CONCERT_HALL, name, loc, cap)
     print("A building is successfully inserted")
@@ -77,7 +77,7 @@ def insert_a_new_building():
 
 # 5번 선택 시
 def remove_a_building():
-    id = input("Building id: ")
+    id = input("ConcertHall ID: ")
 
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_CONCERTHALL_ID, id)
     if len(re) == 0:
@@ -94,10 +94,10 @@ def insert_a_new_performance():
     try:
         price = int(price)
     except TypeError:
-        PrintManager.instance().printError("Please insert number (price)")
+        PrintManager.instance().printError("Please Input number (price)")
         return
-    DBController.instance().excuteQuery(QUERY.INSERT_CONCERT, name, typ, price)
-    print("A performance is successfully inserted")
+    re = DBController.instance().excuteQuery(QUERY.INSERT_CONCERT, name, typ, price)
+    print(re)
 
 
 # 7번 선택 시
@@ -111,18 +111,18 @@ def remove_a_performance():
 def insert_a_new_audience():
     name = input("Audience name: ")
     gender = input("Audience gender: ")
-    if gender != 'M' and gender != 'F':
-        PrintManager.instance().printError("Please insert 'M' or 'F' gender")
+    if gender != 'M' or gender != 'F':
+        PrintManager.instance().printError("Please input 'M' or 'F' gender")
         return
 
     price = input("Audience age: ")
     try:
         price = int(price)
     except TypeError:
-        PrintManager.instance().printError("Please insert number (price)")
+        PrintManager.instance().printError("Please input number (price)")
         return
-    DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, price)
-    print("An audience is successfully inserted")
+    re = DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, price)
+    print(re)
 
 
 # 9번 선택 시
