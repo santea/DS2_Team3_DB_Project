@@ -121,25 +121,25 @@ def assign_a_performance_to_a_building():
     bId = PrintManager.input("Building ID: ")
     pId = PrintManager.input("Performance ID: ")
     if DBController.instance().excuteQuery(QUERY.UPDATE_CONCERT_CONCERT_HALL_ID, bId, pId) == 0:
-        PrintManager.printError("Not Exist building or performance or Aready assigned")
+        PrintManager.printError("Already assigned performance OR Not Exist building or performance")
     else:
-        re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId);
+        re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId)
         size = int(re[0]['CAPACITY'])
         DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, size)
         print("A performance is successfully assigned")
-
 
 
 # 11번 선택 시
 def book_a_performance():
     pId = PrintManager.input("Performance ID: ")
     aId = PrintManager.input("Audience ID: ")
-    splitSeat = PrintManager.input("seat number: ", INPUT_TYPE.SEAT)
+    splitSeat = PrintManager.input("seat number: ", inputType=INPUT_TYPE.SEAT)
 
-    #자리 있는지 검사하는 부분 들어가야함
+    print(splitSeat)
+    #re = DBController.instance().excuteQuery(QUERY.SELECT_RESERVATION_BY_SEATNUMS, pId, INPUT_TYPE.SEAT, '')
 
-    for i in range(len(splitSeat)):
-        DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, aId, splitSeat[i])
+    #for i in range(len(splitSeat)):
+#        DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, aId, splitSeat[i])
 
 
 # 12번 선택 시

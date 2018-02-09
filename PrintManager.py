@@ -75,17 +75,16 @@ class PrintManager:
                 raise ValueError("Please input integer Value")
         elif inputType == INPUT_TYPE.GENDER:
             inStr = input(text)
-            if inStr != 'M' or inStr != 'F':
+            if inStr != 'M' and inStr != 'F':
                 raise ValueError("Please input 'M' or 'F'")
             else:
                 return inStr
         elif inputType == INPUT_TYPE.SEAT:
             inStr = input(text)
             splitStr = inStr.split(",")
-            splitStr = splitStr.strip()
             for item in splitStr:
                 try:
-                    int(item)
+                    item = int(item)
                 except ValueError:
                     raise ValueError("Please input integer Value (Seat Num)")
             return splitStr
