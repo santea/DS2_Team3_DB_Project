@@ -87,6 +87,11 @@
         from CONCERT_HALL
         where ID = %s
     </SELECT_CONCERT_HALL_BY_ID>
+    <SELECT_AUDIENCE_BY_CONCERT_ID>
+        select A.ID, A.NAME, A.GENDER, A.AGE
+        from RESERVATION as R, AUDIENCE as A
+        where R.CONCERT_ID = '$s' and R.AUDIENCE_ID = A.ID
+    </SELECT_AUDIENCE_BY_CONCERT_ID>
     <SHOW_TABLES>
         show tables;
     </SHOW_TABLES>
