@@ -49,8 +49,14 @@
         where ID = '%s'
     </UPDATE_CONCERT_CONCERT_HALL_ID>
     <SELECT_PERFORMANCE>
-        select * from CONCERT_HALL where ID='%s' and 1 = %s
+        select * from CONCERT_HALL
+        where ID='%s' and 1 = %s
     </SELECT_PERFORMANCE>
+    <SELECT_RESERVATION_BY_SEATNUMS>
+        select CONCERT_ID, SEAT_NO, AUDIENCE_ID, RESERVATION_YN
+        from RESERVATION
+        where CONCERT_ID = '%s' and SEAT_NO IN ('%s') and RESERVATION_YN = '%s'
+    </SELECT_RESERVATION_BY_SEATNUMS>
     <INSERT_RESERVATION>
         CALL INSERT_SEAT('%s', %s)
     </INSERT_RESERVATION>
