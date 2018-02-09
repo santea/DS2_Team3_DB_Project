@@ -16,6 +16,11 @@
         from AUDIENCE
         order by ID
     </SELECT_AUDIENCE>
+    <SELECT_AUDIENCE_BY_ID>
+        select ID, NAME, GENDER, AGE
+        from AUDIENCE
+        where ID = %s
+    </SELECT_AUDIENCE_BY_ID>
     <INSERT_CONCERT_HALL>
         insert into CONCERT_HALL (NAME, LOCATION, CAPACITY)
         values ('%s', '%s', %s)
@@ -55,15 +60,32 @@
     <SELECT_RESERVATION_BY_SEATNUMS>
         select CONCERT_ID, SEAT_NO, AUDIENCE_ID, RESERVATION_YN
         from RESERVATION
-        where CONCERT_ID = '%s' and SEAT_NO IN ('%s') and RESERVATION_YN = '%s'
+        where CONCERT_ID = %s and SEAT_NO IN (%s) and RESERVATION_YN = '%s'
     </SELECT_RESERVATION_BY_SEATNUMS>
     <INSERT_RESERVATION>
-        CALL INSERT_SEAT('%s', %s)
+        CALL INSERT_SEAT(%s, %s, %s)
     </INSERT_RESERVATION>
+    <UPDATE_RESERVATION>
+        update RESERVATION
+        set RESERVATION_YN = 'Y', AUDIENCE_ID = %s
+        where CONCERT_ID = %s and SEAT_NO = %s
+    </UPDATE_RESERVATION>
+    <SELECT_CONCERT_BY_ID>
+        select ID, CONCERT_HALL_ID, NAME, TYPE, PRICE
+        from CONCERT
+        where ID = %s
+    </SELECT_CONCERT_BY_ID>
+    <SELECT_CONCERT_HALL_BY_CONCERT_ID>
+        select ID, NAME, LOCATION, CAPACITY
+        from CONCERT_HALL
+        where ID = (select CONCERT_HALL_ID
+                    from CONCERT
+                    where CONCERT.ID = %s)
+    </SELECT_CONCERT_HALL_BY_CONCERT_ID>
     <SELECT_CONCERT_HALL_BY_ID>
         select ID, NAME, LOCATION, CAPACITY
         from CONCERT_HALL
-        where ID = '%s'
+        where ID = %s
     </SELECT_CONCERT_HALL_BY_ID>
     <SHOW_TABLES>
         show tables;

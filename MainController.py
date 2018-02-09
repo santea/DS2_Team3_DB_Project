@@ -75,7 +75,7 @@ def remove_a_building():
     id = PrintManager.input("Building ID: ")
 
     if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT_HALL, id) == 0:
-        PrintManager.printError("Not Exist Building (" + id + ")")
+        PrintManager.printError("Not Exist Building (" + str(id) + ")")
     else:
         print("A building is successfully removed")
 
@@ -93,7 +93,7 @@ def insert_a_new_performance():
 def remove_a_performance():
     id = PrintManager.input("Performance ID: ")
     if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT, id) == 0:
-        PrintManager.printError("Not Exist Performance (" + id + ")")
+        PrintManager.printError("Not Exist Performance (" + str(id) + ")")
     else:
         print("A performance is successfully removed")
 
@@ -131,15 +131,58 @@ def assign_a_performance_to_a_building():
 
 # 11번 선택 시
 def book_a_performance():
-    pId = PrintManager.input("Performance ID: ")
-    aId = PrintManager.input("Audience ID: ")
-    splitSeat = PrintManager.input("seat number: ", inputType=INPUT_TYPE.SEAT)
+    pId = PrintManager.input("Performance ID: ", inputType=INPUT_TYPE.INT)
+    aId = PrintManager.input("Audience ID: ", inputType=INPUT_TYPE.INT)
+    seatStr = PrintManager.input("seat number: ", inputType=INPUT_TYPE.SEAT)
 
-    print(splitSeat)
-    #re = DBController.instance().excuteQuery(QUERY.SELECT_RESERVATION_BY_SEATNUMS, pId, INPUT_TYPE.SEAT, '')
+    # 관객 ID 여부 확인
+    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_ID, aId)
 
-    #for i in range(len(splitSeat)):
-#        DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, aId, splitSeat[i])
+    if len(re) == 0:
+        PrintManager.printError("Not Exist Audience (" + str(aId) + ")")
+        return
+
+    age = re[0]['AGE']
+
+    # 공연 ID 여부 확인
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_ID, pId)
+    if len(re) == 0:
+        PrintManager.printError("Not Exist Performance (" + str(aId) + ")")
+        return
+
+    # 공연장 Assign 여부 확인
+    price = re[0]['PRICE']
+    hallId = re[0]['CONCERT_HALL_ID']
+    if hallId is None:
+        PrintManager.printError("Not assigned Performance (" + str(aId) + ")")
+        return
+
+    # 해당 좌석 예약 여부 확인
+    re = DBController.instance().excuteQuery(QUERY.SELECT_RESERVATION_BY_SEATNUMS, pId, seatStr, 'Y')
+    if len(re) != 0:
+        alreadySeat = []
+        for i in re:
+            alreadySeat.append(i['SEAT_NO'])
+        PrintManager.printError("Already reservation seat " + str(alreadySeat))
+        return
+
+    # 좌석 예약
+    for seatNo in seatStr.split(','):
+        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, pId, seatNo) == 0:
+            PrintManager.printError("DB Insert Error")
+            return;
+
+    print("Successfully book a performance")
+
+    # 금액 출력
+    if age <= 7:
+        price = 0
+    elif age <= 12:
+        price *= 0.5
+    elif age <= 18:
+        price *= 0.8
+
+    print("Total ticket price is " + str(price))
 
 
 # 12번 선택 시

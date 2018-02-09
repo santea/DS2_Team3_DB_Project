@@ -82,11 +82,16 @@ class PrintManager:
         elif inputType == INPUT_TYPE.SEAT:
             inStr = input(text)
             splitStr = inStr.split(",")
-            for item in splitStr:
+            returnStr = ""
+            for i in range(len(splitStr)):
                 try:
-                    item = int(item)
+                    returnStr += splitStr[i]
+                    if i != len(splitStr) - 1:
+                        returnStr += ","
+
                 except ValueError:
                     raise ValueError("Please input integer Value (Seat Num)")
-            return splitStr
+
+            return returnStr
 
         return None
