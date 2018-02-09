@@ -120,8 +120,14 @@ def remove_an_audience():
 def assign_a_performance_to_a_building():
     bId = PrintManager.input("Building ID: ")
     pId = PrintManager.input("Performance ID: ")
-    if DBController.instance().excuteQuery(QUERY.UPDATE_PCONCERT, bId, pId) == 2:
+    if DBController.instance().excuteQuery(QUERY.UPDATE_CONCERT_CONCERT_HALL_ID, bId, pId) == 0:
+        PrintManager.printError("Not Exist building or performance or Aready assigned")
+    else:
+        re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId);
+        size = int(re[0]['CAPACITY'])
+        DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, size)
         print("A performance is successfully assigned")
+
 
 
 # 11번 선택 시

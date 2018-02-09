@@ -43,14 +43,19 @@
     <UPDATE_CONCERT>
         select 1
     </UPDATE_CONCERT>
+    <UPDATE_CONCERT_CONCERT_HALL_ID>
+        update CONCERT
+        set CONCERT_HALL_ID = '%s'
+        where ID = '%s'
+    </UPDATE_CONCERT_CONCERT_HALL_ID>
     <SELECT_PERFORMANCE>
         select * from CONCERT_HALL where ID='%s' and 1 = %s
     </SELECT_PERFORMANCE>
     <INSERT_RESERVATION>
-        select 1
+        CALL INSERT_SEAT('%s', %s)
     </INSERT_RESERVATION>
     <SELECT_CONCERT_HALL_BY_ID>
-        select *
+        select ID, NAME, LOCATION, CAPACITY
         from CONCERT_HALL
         where ID = '%s'
     </SELECT_CONCERT_HALL_BY_ID>
