@@ -149,7 +149,9 @@ def print_all_performances_which_assigned_at_a_building():
 
 # 13번 선택 시
 def print_all_audiences_who_booked_for_a_performance():
-    return None
+    pId = PrintManager.input("Performance ID: ")
+    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_CONCERT_ID, pid)
+    PrintManager.printTable(re)
 
 
 # 14번 선택 시
