@@ -62,6 +62,11 @@
         from RESERVATION
         where CONCERT_ID = %s and SEAT_NO IN (%s) and RESERVATION_YN = '%s'
     </SELECT_RESERVATION_BY_SEATNUMS>
+    <SELECT_RESERVATION_BY_CONCERT_ID>
+        select SEAT_NO, AUDIENCE_ID
+        from RESERVATION
+        where CONCERT_ID = %s
+    </SELECT_RESERVATION_BY_CONCERT_ID>
     <INSERT_RESERVATION>
         CALL INSERT_SEAT(%s, %s, %s)
     </INSERT_RESERVATION>
@@ -75,6 +80,13 @@
         from CONCERT
         where ID = %s
     </SELECT_CONCERT_BY_ID>
+    <SELECT_CONCERT_BY_HALL_ID>
+        select ID, NAME, TYPE, PRICE, (select count(*)
+                                       from RESERVATION
+                                       where  RESERVATION_YN = 'N' and CONCERT_ID = C.ID) as REMAIN_SEAT
+        from CONCERT as C
+        where CONCERT_HALL_ID = %s
+    </SELECT_CONCERT_BY_HALL_ID>
     <SELECT_CONCERT_HALL_BY_CONCERT_ID>
         select ID, NAME, LOCATION, CAPACITY
         from CONCERT_HALL
@@ -88,18 +100,18 @@
         where ID = %s
     </SELECT_CONCERT_HALL_BY_ID>
     <SELECT_AUDIENCE_BY_CONCERT_ID>
-        select A.ID, A.NAME, A.GENDER, A.AGE
+        select distinct A.ID, A.NAME, A.GENDER, A.AGE
         from RESERVATION as R, AUDIENCE as A
-        where R.CONCERT_ID = '$s' and R.AUDIENCE_ID = A.ID
+        where R.CONCERT_ID = %s and R.AUDIENCE_ID = A.ID
     </SELECT_AUDIENCE_BY_CONCERT_ID>
     <SHOW_TABLES>
         show tables;
     </SHOW_TABLES>
     <DROP_TABLES>
-        drop table RESERVATION, CONCERT, AUDIENCE, CONCERT_HALL;
+        drop table IF EXISTS RESERVATION, CONCERT, AUDIENCE, CONCERT_HALL;
     </DROP_TABLES>
     <CREATE_TABLES>
-        create table CONCERT_HALL (
+        create table IF NOT EXISTS CONCERT_HALL (
         ID INT UNSIGNED AUTO_INCREMENT,
         NAME VARCHAR(200) NOT NULL,
         LOCATION VARCHAR(200) NOT NULL,
@@ -107,7 +119,7 @@
         CONSTRAINT CONCERT_HALL_PK PRIMARY KEY (ID)
         );
 
-        create table CONCERT (
+        create table IF NOT EXISTS CONCERT (
         ID INT UNSIGNED AUTO_INCREMENT,
         CONCERT_HALL_ID INT UNSIGNED,
         NAME VARCHAR(200) NOT NULL,
@@ -120,7 +132,7 @@
             ON UPDATE CASCADE
         );
 
-        create table AUDIENCE (
+        create table IF NOT EXISTS AUDIENCE (
         ID INT UNSIGNED AUTO_INCREMENT,
         NAME VARCHAR(200) NOT NULL,
         GENDER VARCHAR(1) NOT NULL,
@@ -128,7 +140,7 @@
         PRIMARY KEY(ID)
         );
 
-        create table RESERVATION (
+        create table IF NOT EXISTS RESERVATION (
         CONCERT_ID int UNSIGNED,
         SEAT_NO int UNSIGNED CHECK (SEAT_NO > 0),
         AUDIENCE_ID int UNSIGNED,

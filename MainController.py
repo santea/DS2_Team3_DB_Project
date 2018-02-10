@@ -120,13 +120,24 @@ def remove_an_audience():
 def assign_a_performance_to_a_building():
     bId = PrintManager.input("Building ID: ")
     pId = PrintManager.input("Performance ID: ")
-    if DBController.instance().excuteQuery(QUERY.UPDATE_CONCERT_CONCERT_HALL_ID, bId, pId) == 0:
-        PrintManager.printError("Already assigned performance OR Not Exist building or performance")
+
+    re = getPerformanceByID(pId)
+
+    assign = re[0]['CONCERT_HALL_ID']
+
+    if assign is not None:
+        PrintManager.printError("Already assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        return
+
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId)
+    if len(re) == 0:
+        PrintManager.printError("Not Exist building")
     else:
-        re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId)
         size = int(re[0]['CAPACITY'])
-        DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, size)
-        print("A performance is successfully assigned")
+        if DBController.instance().excuteQuery(QUERY.UPDATE_CONCERT_CONCERT_HALL_ID, bId, pId) != 0:
+            print("A performance is successfully assigned")
+        else:
+            PrintManager.printError("assigned Error")
 
 
 # 11번 선택 시
@@ -144,11 +155,8 @@ def book_a_performance():
 
     age = re[0]['AGE']
 
-    # 공연 ID 여부 확인
-    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_ID, pId)
-    if len(re) == 0:
-        PrintManager.printError("Not Exist Performance (" + str(aId) + ")")
-        return
+    # 공연 확인
+    re = getPerformanceByID(pId)
 
     # 공연장 Assign 여부 확인
     price = re[0]['PRICE']
@@ -181,25 +189,41 @@ def book_a_performance():
         price *= 0.5
     elif age <= 18:
         price *= 0.8
-
+    price = round(price, 2)
     print("Total ticket price is " + str(price))
 
 
 # 12번 선택 시
 def print_all_performances_which_assigned_at_a_building():
-    return None
+    bId = PrintManager.input("Building ID: ")
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId)
+    if len(re) == 0:
+        PrintManager.printError("Not Exist building")
+        return
+    PrintManager.printTable(re)
 
 
 # 13번 선택 시
 def print_all_audiences_who_booked_for_a_performance():
     pId = PrintManager.input("Performance ID: ")
-    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_CONCERT_ID, pid)
+
+    re = getPerformanceByID(pId)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_CONCERT_ID, pId)
     PrintManager.printTable(re)
 
 
 # 14번 선택 시
 def print_ticket_booking_status_of_a_performance():
-    return None
+    pId = PrintManager.input("Performance ID: ")
+    re = getPerformanceByID(pId)
+    assign = re[0]['CONCERT_HALL_ID']
+
+    if assign is None:
+        PrintManager.printError("Not assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        return
+
+    re = DBController.instance().excuteQuery(QUERY.SELECT_RESERVATION_BY_CONCERT_ID, pId)
+    PrintManager.printTable(re)
 
 
 # 15번 선택 시 : 프로그램 종료
@@ -218,4 +242,12 @@ def reset_database():
         DBController.instance().excuteQuery(QUERY.CREATE_TABLES)
         print("Database is successfully reset")
     return None
+
+
+# 콘서트 정보 가져오고 없으면 에러 발생
+def getPerformanceByID(pId):
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_ID, pId)
+    if len(re) == 0:
+        raise EnvironmentError("Not Exist Performance (" + str(pId) + ")")
+    return re
 
