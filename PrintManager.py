@@ -1,5 +1,6 @@
 import MainController
 import sys, os
+from prettytable import PrettyTable
 from colorama import Fore, Style
 from Constant import INPUT_TYPE
 
@@ -69,8 +70,7 @@ class PrintManager:
         if inputType == INPUT_TYPE.STR:
             inStr = input(text)
             if maxLen <= len(inStr):
-                self.printError("Input size error | max :" + str(maxLen) + ", input :" + str(len(inStr)))
-                return inStr[:200]
+                raise ValueError("Input size error | max :" + str(maxLen) + ", input :" + str(len(inStr)))
             else:
                 return inStr
         elif inputType == INPUT_TYPE.INT:
