@@ -199,7 +199,7 @@ def book_a_performance():
 # 12번 선택 시
 def print_all_performances_which_assigned_at_a_building():
     bId = PrintManager.input("Building ID: ")
-    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_HALL_ID, bId)
     if len(re) == 0:
         PrintManager.printError("Not Exist building")
         return
