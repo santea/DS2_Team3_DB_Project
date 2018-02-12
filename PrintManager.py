@@ -1,6 +1,5 @@
 import MainController
 import sys, os
-from prettytable import PrettyTable
 from colorama import Fore, Style
 from Constant import INPUT_TYPE
 
@@ -35,16 +34,23 @@ class PrintManager:
             self.printError("No result")
         elif len(obj) > 0:
             # table 헤더 설정
-            table = PrettyTable(list(obj[0].keys()))
+            print(f"{Fore.GREEN}")
+            print('--------------------------------------------------------------------------------')
+            for item in obj[0].keys():
+                print("%-15s" % item, end='')
+            print()
+            print('--------------------------------------------------------------------------------')
             # table 행 입력
             for i in range(len(obj)):
                 # None 을 빈 문자열로 교환
                 val = list(map(lambda x: "" if x is None else x, obj[i].values()))
-                table.add_row(val)
+                for item in val:
+                    print("%-15s" % item, end='')
+                print()
 
             # table 출력 (초록색)
-            print(f"{Fore.GREEN}")
-            print(table, f"{Style.RESET_ALL}")
+            print('--------------------------------------------------------------------------------')
+            print(f"{Style.RESET_ALL}")
 
     # Except 발생시 정보 출력
     @classmethod
