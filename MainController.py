@@ -135,6 +135,7 @@ def assign_a_performance_to_a_building():
     else:
         size = int(re[0]['CAPACITY'])
         if DBController.instance().excuteQuery(QUERY.UPDATE_CONCERT_CONCERT_HALL_ID, bId, pId) != 0:
+            DBController.instance().excuteQuery(QUERY.INSERT_RESERVATION, pId, size)
             print("A performance is successfully assigned")
         else:
             PrintManager.printError("assigned Error")
@@ -144,7 +145,7 @@ def assign_a_performance_to_a_building():
 def book_a_performance():
     pId = PrintManager.input("Performance ID: ", inputType=INPUT_TYPE.INT)
     aId = PrintManager.input("Audience ID: ", inputType=INPUT_TYPE.INT)
-    seatStr = PrintManager.input("seat number: ", inputType=INPUT_TYPE.SEAT)
+    seatStr, seatCnt = PrintManager.input("seat number: ", inputType=INPUT_TYPE.SEAT)
 
     # 관객 ID 여부 확인
     re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_ID, aId)
@@ -178,7 +179,7 @@ def book_a_performance():
     for seatNo in seatStr.split(','):
         if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, pId, seatNo) == 0:
             PrintManager.printError("DB Insert Error")
-            return;
+            return
 
     print("Successfully book a performance")
 
@@ -189,6 +190,8 @@ def book_a_performance():
         price *= 0.5
     elif age <= 18:
         price *= 0.8
+    price *= seatCnt
+
     price = round(price, 2)
     print("Total ticket price is " + str(price))
 

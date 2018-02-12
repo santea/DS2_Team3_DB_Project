@@ -68,7 +68,7 @@
         where CONCERT_ID = %s
     </SELECT_RESERVATION_BY_CONCERT_ID>
     <INSERT_RESERVATION>
-        CALL INSERT_SEAT(%s, %s, %s)
+        CALL INSERT_SEAT(%s, %s)
     </INSERT_RESERVATION>
     <UPDATE_RESERVATION>
         update RESERVATION

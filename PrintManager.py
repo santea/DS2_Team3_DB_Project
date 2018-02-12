@@ -83,8 +83,10 @@ class PrintManager:
             inStr = input(text)
             splitStr = inStr.split(",")
             returnStr = ""
+            seatCnt = 0
             for i in range(len(splitStr)):
                 try:
+                    seatCnt += 1
                     returnStr += splitStr[i]
                     if i != len(splitStr) - 1:
                         returnStr += ","
@@ -92,6 +94,6 @@ class PrintManager:
                 except ValueError:
                     raise ValueError("Please input integer Value (Seat Num)")
 
-            return returnStr
+            return returnStr, seatCnt
 
         return None
