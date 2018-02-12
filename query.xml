@@ -95,9 +95,11 @@
                     where CONCERT.ID = %s)
     </SELECT_CONCERT_HALL_BY_CONCERT_ID>
     <SELECT_CONCERT_HALL_BY_ID>
-        select ID, NAME, LOCATION, CAPACITY
-        from CONCERT_HALL
-        where ID = %s
+        select ID, NAME, TYPE, PRICE, (select count(*)
+                                       from RESERVATION
+                                       where  RESERVATION_YN = 'N' and CONCERT_ID = C.ID) as REMAIN_SEAT
+        from CONCERT as C
+        where CONCERT_HALL_ID = %s
     </SELECT_CONCERT_HALL_BY_ID>
     <SELECT_AUDIENCE_BY_CONCERT_ID>
         select distinct A.ID, A.NAME, A.GENDER, A.AGE
