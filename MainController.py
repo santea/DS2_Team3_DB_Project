@@ -207,9 +207,13 @@ def print_all_performances_which_assigned_at_a_building():
 def print_all_audiences_who_booked_for_a_performance():
     pId = PrintManager.input("Performance ID: ")
 
-    re = getPerformanceByID(pId)
-    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_CONCERT_ID, pId)
-    PrintManager.printTable(re)
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_ID, pId)
+    print(len(re))
+    if len(re) == 0:
+        PrintManager.printError("Not Exist Performance (" + str(pId) + ")")
+    else:
+        re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_CONCERT_ID, pId)
+        PrintManager.printTable(re)
 
 
 # 14번 선택 시
