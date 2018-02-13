@@ -64,7 +64,8 @@ class IOManager:
         if inputType == INPUT_TYPE.STR:
             inStr = input(text)
             if maxLen <= len(inStr):
-                raise ValueError("Input size error | max :" + str(maxLen) + ", input :" + str(len(inStr)))
+                self.printError("Input size error | max :" + str(maxLen) + ", input :" + str(len(inStr)))
+                return inStr[:200]
             else:
                 return inStr
         elif inputType == INPUT_TYPE.INT:

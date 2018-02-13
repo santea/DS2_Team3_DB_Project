@@ -2,7 +2,7 @@ from enum import Enum
 
 
 # 디버그 모드 설정 : True 시 쿼리 / 결과 출력
-IS_DEBUG_MODE = True
+IS_DEBUG_MODE = False
 
 # 입력창 입력 타입 종류
 class INPUT_TYPE(Enum):

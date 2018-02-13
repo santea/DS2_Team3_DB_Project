@@ -7,7 +7,7 @@ def main():
     IOManager.printMenu()
 
     # 참고용 함수
-    test()
+    #test()
 
     # main loop
     while True:
