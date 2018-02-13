@@ -45,9 +45,6 @@
         delete from AUDIENCE
         where ID = '%s'
     </DELETE_AUDIENCE>
-    <UPDATE_CONCERT>
-        select 1
-    </UPDATE_CONCERT>
     <UPDATE_CONCERT_CONCERT_HALL_ID>
         update CONCERT
         set CONCERT_HALL_ID = '%s'
