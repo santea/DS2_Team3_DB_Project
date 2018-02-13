@@ -192,7 +192,7 @@ def book_a_performance():
         price *= 0.8
     price *= seatCnt
 
-    price = round(price, 2)
+    price = round(price, 1)
     print("Total ticket price is " + str(price))
 
 
