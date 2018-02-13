@@ -27,7 +27,7 @@
     </INSERT_CONCERT_HALL>
     <DELETE_CONCERT_HALL>
         delete from CONCERT_HALL
-        where ID = '%s'
+        where ID = %s
     </DELETE_CONCERT_HALL>
     <INSERT_CONCERT>
         insert into CONCERT (NAME, TYPE, PRICE)
@@ -42,8 +42,11 @@
         values ('%s', '%s', %s)
     </INSERT_AUDIENCE>
     <DELETE_AUDIENCE>
+        update RESERVATION
+        set AUDIENCE_ID = NULL, RESERVATION_YN = 'N'
+        where AUDIENCE_ID = %s;
         delete from AUDIENCE
-        where ID = '%s'
+        where ID = %s;
     </DELETE_AUDIENCE>
     <UPDATE_CONCERT_CONCERT_HALL_ID>
         update CONCERT
@@ -149,8 +152,6 @@
             ON UPDATE CASCADE,
         CONSTRAINT RESERVATION_AUDIENCE_FK FOREIGN KEY (AUDIENCE_ID)
             REFERENCES AUDIENCE(ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
         );
     </CREATE_TABLES>
 </query>

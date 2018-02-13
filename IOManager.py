@@ -60,7 +60,7 @@ class IOManager:
         print(f"{Fore.RED}[Error] " + msg + f"{Style.RESET_ALL}")
 
     @classmethod
-    def input(self, text, maxLen=200, inputType=INPUT_TYPE.STR):
+    def input(self, text, maxLen=200, inputType=INPUT_TYPE.STR, minvalue=0):
         if inputType == INPUT_TYPE.STR:
             inStr = input(text)
             if maxLen <= len(inStr):
@@ -72,9 +72,12 @@ class IOManager:
             inStr = input(text)
             try:
                 inInt = int(inStr)
+                if inInt < minvalue:
+                    raise ValueError("Please input more then " + str(minvalue) + " integer Value")
                 return inInt
-            except ValueError:
-                raise ValueError("Please input integer Value")
+
+            except Exception:
+                raise ValueError("Please input more then " + str(minvalue) + " integer Value")
         elif inputType == INPUT_TYPE.GENDER:
             inStr = input(text)
             if inStr != 'M' and inStr != 'F':
@@ -90,11 +93,13 @@ class IOManager:
                 try:
                     seatCnt += 1
                     returnStr += splitStr[i]
+                    if int(splitStr[i]) < minvalue:
+                        raise ValueError
                     if i != len(splitStr) - 1:
                         returnStr += ","
 
                 except ValueError:
-                    raise ValueError("Please input integer Value (Seat Num)")
+                    raise ValueError("Please input more then " + str(minvalue) + " integer Value (Seat Num)")
 
             return returnStr, seatCnt
 

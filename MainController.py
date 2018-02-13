@@ -64,7 +64,7 @@ def print_all_audiences():
 def insert_a_new_building():
     name = IOManager.input("Building name: ")
     loc = IOManager.input("Building location: ")
-    cap = IOManager.input("Building capacity: ", inputType=INPUT_TYPE.INT)
+    cap = IOManager.input("Building capacity: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
     if DBController.instance().excuteQuery(QUERY.INSERT_CONCERT_HALL, name, loc, cap) == 1:
         print("A building is successfully inserted")
@@ -72,7 +72,7 @@ def insert_a_new_building():
 
 # 5번 선택 시
 def remove_a_building():
-    id = IOManager.input("Building ID: ")
+    id = IOManager.input("Building ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
     if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT_HALL, id) == 0:
         IOManager.printError("Not Exist Building (" + str(id) + ")")
@@ -91,7 +91,7 @@ def insert_a_new_performance():
 
 # 7번 선택 시
 def remove_a_performance():
-    id = IOManager.input("Performance ID: ")
+    id = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
     if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT, id) == 0:
         IOManager.printError("Not Exist Performance (" + str(id) + ")")
     else:
@@ -102,24 +102,24 @@ def remove_a_performance():
 def insert_a_new_audience():
     name = IOManager.input("Audience name: ")
     gender = IOManager.input("Audience gender: ", inputType=INPUT_TYPE.GENDER)
-    age = IOManager.input("Audience age: ", inputType=INPUT_TYPE.INT)
+    age = IOManager.input("Audience age: ", inputType=INPUT_TYPE.INT, minvalue=1)
     if DBController.instance().excuteQuery(QUERY.INSERT_AUDIENCE, name, gender, age) == 1:
         print("A audience is successfully inserted")
 
 
 # 9번 선택 시
 def remove_an_audience():
-    id = IOManager.input("Audience ID: ")
-    if DBController.instance().excuteQuery(QUERY.DELETE_AUDIENCE, id) == 0:
-        IOManager.printError("Not Exist Audience (" + id + ")")
+    id = IOManager.input("Audience ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    if DBController.instance().excuteQuery(QUERY.DELETE_AUDIENCE, id, id) == 0:
+        IOManager.printError("Not Exist Audience (" + str(id) + ")")
     else:
         print("A audience is successfully removed")
 
 
 # 10번 선택 시
 def assign_a_performance_to_a_building():
-    bId = IOManager.input("Building ID: ")
-    pId = IOManager.input("Performance ID: ")
+    bId = IOManager.input("Building ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
     re = getPerformanceByID(pId)
 
@@ -143,9 +143,9 @@ def assign_a_performance_to_a_building():
 
 # 11번 선택 시
 def book_a_performance():
-    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT)
-    aId = IOManager.input("Audience ID: ", inputType=INPUT_TYPE.INT)
-    seatStr, seatCnt = IOManager.input("seat number: ", inputType=INPUT_TYPE.SEAT)
+    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    aId = IOManager.input("Audience ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    seatStr, seatCnt = IOManager.input("seat number: ", inputType=INPUT_TYPE.SEAT, minvalue=1)
 
     # 관객 ID 여부 확인
     re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_ID, aId)
@@ -174,11 +174,17 @@ def book_a_performance():
             alreadySeat.append(i['SEAT_NO'])
         IOManager.printError("Already reservation seat " + str(alreadySeat))
         return
+    
+    # 없는 좌석 있는지 확인
+    re = DBController.instance().excuteQuery(QUERY.SELECT_RESERVATION_BY_SEATNUMS, pId, seatStr, 'N')
+    if len(re) != seatCnt:
+        IOManager.printError("Not Exist Seat")
+        return
 
     # 좌석 예약
     for seatNo in seatStr.split(','):
         if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, pId, seatNo) == 0:
-            IOManager.printError("DB Insert Error")
+            IOManager.printError("Not exist Seat")
             return
 
     print("Successfully book a performance")
@@ -192,13 +198,13 @@ def book_a_performance():
         price *= 0.8
     price *= seatCnt
 
-    price = round(price, 1)
+    price = round(price)
     print("Total ticket price is " + str(price))
 
 
 # 12번 선택 시
 def print_all_performances_which_assigned_at_a_building():
-    bId = IOManager.input("Building ID: ")
+    bId = IOManager.input("Building ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_HALL_ID, bId)
     if len(re) == 0:
         IOManager.printError("Not Exist building")
@@ -208,10 +214,10 @@ def print_all_performances_which_assigned_at_a_building():
 
 # 13번 선택 시
 def print_all_audiences_who_booked_for_a_performance():
-    pId = IOManager.input("Performance ID: ")
+    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_ID, pId)
-    print(len(re))
+
     if len(re) == 0:
         IOManager.printError("Not Exist Performance (" + str(pId) + ")")
     else:
@@ -221,7 +227,7 @@ def print_all_audiences_who_booked_for_a_performance():
 
 # 14번 선택 시
 def print_ticket_booking_status_of_a_performance():
-    pId = IOManager.input("Performance ID: ")
+    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
     re = getPerformanceByID(pId)
     assign = re[0]['CONCERT_HALL_ID']
 
