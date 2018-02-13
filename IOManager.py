@@ -35,23 +35,17 @@ class IOManager:
             self.printError("No result")
         elif len(obj) > 0:
             # table 헤더 설정
-            print(f"{Fore.GREEN}")
-            print('--------------------------------------------------------------------------------')
-            for item in obj[0].keys():
-                print("%-15s" % item, end='')
-            print()
-            print('--------------------------------------------------------------------------------')
+            table = PrettyTable(list(obj[0].keys()))
             # table 행 입력
             for i in range(len(obj)):
                 # None 을 빈 문자열로 교환
                 val = list(map(lambda x: "" if x is None else x, obj[i].values()))
-                for item in val:
-                    print("%-15s" % item, end='')
-                print()
+                table.add_row(val)
 
             # table 출력 (초록색)
-            print('--------------------------------------------------------------------------------')
-            print(f"{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}")
+            table.padding_width = 3
+            print(table, f"{Style.RESET_ALL}")
 
     # Except 발생시 정보 출력
     @classmethod
