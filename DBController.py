@@ -1,5 +1,5 @@
 import pymysql.cursors
-from PrintManager import PrintManager
+from IOManager import IOManager
 from xml.etree.ElementTree import parse
 from Constant import IS_DEBUG_MODE
 
@@ -31,7 +31,7 @@ class DBController:
                                   autocommit=True,
                                   cursorclass=pymysql.cursors.DictCursor)
         except Exception as e:
-            PrintManager.printExcept(e)
+            IOManager.printExcept(e)
 
         return con
 
@@ -68,7 +68,7 @@ class DBController:
                 if IS_DEBUG_MODE:
                     print("result >", result)
         except Exception as e:
-            PrintManager.printExcept(e)
+            IOManager.printExcept(e)
         finally:
             connection.close()
 
@@ -79,6 +79,6 @@ class DBController:
         query = tree.getroot()
         element = query.find(queryType.name)
         if element is None or element.text == "":
-            PrintManager.printError("Can not find " + queryType.name + " from query.xml")
+            IOManager.printError("Can not find " + queryType.name + " from query.xml")
             return None
         return element.text

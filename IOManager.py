@@ -5,7 +5,7 @@ from colorama import Fore, Style
 from Constant import INPUT_TYPE
 
 
-class PrintManager:
+class IOManager:
     def __init__(self):
         return None
 
