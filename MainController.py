@@ -271,7 +271,6 @@ def print_ticket_booking_status_and_sales_of_a_performance():
     IOManager.printTable(re)
 
 
-
 # 콘서트 정보 가져오고 없으면 에러 발생
 def getPerformanceByID(pId):
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_ID, pId)
