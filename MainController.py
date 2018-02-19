@@ -144,7 +144,7 @@ def assign_a_performance_to_a_building():
     bId = IOManager.input("Building ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
     pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
-    # performance 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
+    # 공연 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
     re = getPerformanceByID(pId)
     assign = re[0]['CONCERT_HALL_ID']
 
@@ -185,7 +185,7 @@ def book_a_performance():
 
     age = re[0]['AGE']
 
-    # performance 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
+    # 공연 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
     re = getPerformanceByID(pId)
 
     # 공연장 Assign 여부 확인
@@ -272,11 +272,11 @@ def print_ticket_booking_status_of_a_performance():
     # 필요 정보 입력
     pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
-    # performance 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
+    # 공연 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
     re = getPerformanceByID(pId)
     assign = re[0]['CONCERT_HALL_ID']
 
-    # 어사인된 공연이 없는 경우
+    # Assign된 공연이 없는 경우
     if assign is None:
         IOManager.printError("Not assigned performance (" + str(pId) + " > " + str(assign) + ")")
         return
@@ -312,7 +312,7 @@ def print_ticket_booking_status_and_sales_of_a_performance():
     # 필요 정보 입력
     pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
-    # performance 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
+    # 공연 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
     re = getPerformanceByID(pId)
     assign = re[0]['CONCERT_HALL_ID']
 
@@ -341,7 +341,7 @@ def book_a_performance_with_a_specific_payment_method_extend():
 
     age = re[0]['AGE']
 
-    # performance 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
+    # 공연 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
     re = getPerformanceByID(pId)
 
     # 공연장 Assign 여부 확인
@@ -415,7 +415,7 @@ def print_ticket_booking_status_and_sales_of_a_performance_extend():
     # 필요 정보 입력
     pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
-    # performance 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
+    # 공연 가져오는 함수 수행(DB 쿼리 후 없으면 에러 있으면 리턴)
     re = getPerformanceByID(pId)
     assign = re[0]['CONCERT_HALL_ID']
 
@@ -427,7 +427,7 @@ def print_ticket_booking_status_and_sales_of_a_performance_extend():
     IOManager.printTable(re)
 
 
-# 콘서트 정보 가져오고 없으면 에러 발생
+# 공연 정보 가져오고 없으면 에러 발생
 def getPerformanceByID(pId):
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_ID, pId)
     if len(re) == 0:
