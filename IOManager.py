@@ -2,7 +2,7 @@ import MainController
 import sys, os
 from prettytable import PrettyTable
 from colorama import Fore, Style
-from Constant import INPUT_TYPE
+from Constant import INPUT_TYPE, PAYMENT_TYPE
 
 
 class IOManager:
@@ -11,20 +11,21 @@ class IOManager:
 
     @classmethod
     def printMenu(self):
-        print("============================================================")
+        print("====================================================================")
         for i in range(len(MainController.MENU_STRING)):
             print(str(i + 1) + ". " + MainController.MENU_STRING[i])
-        print("============================================================")
+        print("====================================================================")
 
     @classmethod
     def getMenuInput(self):
+        #
         inTxt = input("\nSelect your action: ")
         try:
             inNum = int(inTxt)
-            if inNum < 1 or inNum > 16:
+            if inNum < 1 or inNum > 18:
                 raise ()
         except:
-            self.printError("Select your action between 1 and 16")
+            self.printError("Select your action between 1 and 18")
             return self.getMenuInput()
         return inNum
 
@@ -63,6 +64,10 @@ class IOManager:
     def input(self, text, maxLen=200, inputType=INPUT_TYPE.STR, minvalue=0):
         if inputType == INPUT_TYPE.STR:
             inStr = input(text)
+
+            if inStr == "":
+                raise ValueError("Please input string")
+
             if maxLen <= len(inStr):
                 self.printError("Input size error | max :" + str(maxLen) + ", input :" + str(len(inStr)))
                 return inStr[:200]
@@ -80,7 +85,8 @@ class IOManager:
                 raise ValueError("Please input more then " + str(minvalue) + " integer Value")
         elif inputType == INPUT_TYPE.GENDER:
             inStr = input(text)
-            if inStr != 'M' and inStr != 'F':
+            inStr = inStr.lower()
+            if inStr != 'm' and inStr != 'f':
                 raise ValueError("Please input 'M' or 'F'")
             else:
                 return inStr
@@ -89,6 +95,10 @@ class IOManager:
             splitStr = inStr.split(",")
             returnStr = ""
             seatCnt = 0
+
+            if inStr == "":
+                raise ValueError("Please input string")
+
             for i in range(len(splitStr)):
                 try:
                     seatCnt += 1
@@ -102,5 +112,24 @@ class IOManager:
                     raise ValueError("Please input more then " + str(minvalue) + " integer Value (Seat Num)")
 
             return returnStr, seatCnt
+        elif inputType == INPUT_TYPE.PAYMENT:
+            inStr = input(text)
+            inStr = inStr.lower()
+
+            if inStr == "":
+                raise ValueError("Please input string")
+
+            validation = False
+
+            paymentStr = ""
+            for i in list(PAYMENT_TYPE):
+                paymentStr += i.value + " "
+                if i.value == inStr:
+                    validation = True
+
+            if validation == False:
+                raise ValueError("Please input (" + paymentStr + ")")
+            else:
+                return inStr
 
         return None

@@ -4,12 +4,22 @@ from enum import Enum
 # 디버그 모드 설정 : True 시 쿼리 / 결과 출력
 IS_DEBUG_MODE = False
 
+# 지불 방법 종류
+class PAYMENT_TYPE(Enum):
+    CASH = 'cash'
+    DEPOSIT = 'deposit'
+    CARD_SAMSUNG = 'card-samsung'
+    CARD_HYUNDAI = 'card-hyundai'
+    CARD_OTHER = 'card-other'
+
+
 # 입력창 입력 타입 종류
 class INPUT_TYPE(Enum):
     STR = 1
     INT = 2
     GENDER = 3
     SEAT = 4
+    PAYMENT = 5
 
 # 쿼리 종류  쿼리 추가시 여기와 query.xml에 추가
 class QUERY(Enum):

@@ -72,7 +72,7 @@
     </INSERT_RESERVATION>
     <UPDATE_RESERVATION>
         update RESERVATION
-        set RESERVATION_YN = 'Y', AUDIENCE_ID = %s
+        set RESERVATION_YN = 'Y', AUDIENCE_ID = %s, PAYMENT = '%s', PRICE_PAID = %s
         where CONCERT_ID = %s and SEAT_NO = %s
     </UPDATE_RESERVATION>
     <SELECT_CONCERT_BY_ID>

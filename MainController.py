@@ -1,6 +1,6 @@
 import sys
 from DBController import DBController
-from Constant import QUERY, INPUT_TYPE
+from Constant import QUERY, INPUT_TYPE, PAYMENT_TYPE
 from IOManager import IOManager
 
 
@@ -19,7 +19,10 @@ MENU_STRING = ["print all buildings",
                "print all audiences who booked for a performance",
                "print ticket booking status of a performance",
                "exit",
-               "reset database"]
+               "reset database",
+               "book a performance with a specific payment method (extend)",
+               "print ticket booking status and sales of a performance (extend)",
+               ]
 
 
 # 테스트 함수입니다!! 참고용...
@@ -181,24 +184,28 @@ def book_a_performance():
         IOManager.printError("Not Exist Seat")
         return
 
+    discount = 1
+
+    if age <= 7:
+        discount = 0
+    elif age <= 12:
+        discount *= 0.5
+    elif age <= 18:
+        discount *= 0.8
+
+    price *= discount
+    price = round(price)
+
     # 좌석 예약
     for seatNo in seatStr.split(','):
-        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, pId, seatNo) == 0:
+        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, 'NULL',  price, pId, seatNo) == 0:
             IOManager.printError("Not exist Seat")
             return
 
     print("Successfully book a performance")
 
-    # 금액 출력
-    if age <= 7:
-        price = 0
-    elif age <= 12:
-        price *= 0.5
-    elif age <= 18:
-        price *= 0.8
+    # 좌석 수 곱
     price *= seatCnt
-
-    price = round(price)
     print("Total ticket price is " + str(price))
 
 
@@ -259,6 +266,97 @@ def reset_database():
 # 18번 선택 시 : 공연별 예매 정보 및 가격정보 출력
 def print_ticket_booking_status_and_sales_of_a_performance():
 
+    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    re = getPerformanceByID(pId)
+    assign = re[0]['CONCERT_HALL_ID']
+
+    if assign is None:
+        IOManager.printError("Not assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        return
+
+    re = DBController.instance().excuteQuery(QUERY.SELECT_TICKET_BOOKING_STATUS, pId)
+    IOManager.printTable(re)
+
+
+# 17번 선택 시 : Payment 지정하여 예매
+def book_a_performance_with_a_specific_payment_method_extend():
+    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    aId = IOManager.input("Audience ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    seatStr, seatCnt = IOManager.input("seat number: ", inputType=INPUT_TYPE.SEAT, minvalue=1)
+    payment = IOManager.input("Payment: ", inputType=INPUT_TYPE.PAYMENT)
+
+
+    # 관객 ID 여부 확인
+    re = DBController.instance().excuteQuery(QUERY.SELECT_AUDIENCE_BY_ID, aId)
+
+    if len(re) == 0:
+        IOManager.printError("Not Exist Audience (" + str(aId) + ")")
+        return
+
+    age = re[0]['AGE']
+
+    # 공연 확인
+    re = getPerformanceByID(pId)
+
+    # 공연장 Assign 여부 확인
+    price = re[0]['PRICE']
+    hallId = re[0]['CONCERT_HALL_ID']
+    if hallId is None:
+        IOManager.printError("Not assigned Performance (" + str(aId) + ")")
+        return
+
+    # 해당 좌석 예약 여부 확인
+    re = DBController.instance().excuteQuery(QUERY.SELECT_RESERVATION_BY_SEATNUMS, pId, seatStr, 'Y')
+    if len(re) != 0:
+        alreadySeat = []
+        for i in re:
+            alreadySeat.append(i['SEAT_NO'])
+        IOManager.printError("Already reservation seat " + str(alreadySeat))
+        return
+
+    # 없는 좌석 있는지 확인
+    re = DBController.instance().excuteQuery(QUERY.SELECT_RESERVATION_BY_SEATNUMS, pId, seatStr, 'N')
+    if len(re) != seatCnt:
+        IOManager.printError("Not Exist Seat")
+        return
+
+    discount = 1
+
+    if age <= 7:
+        discount = 0
+    elif age <= 12:
+        discount *= 0.5
+    elif age <= 18:
+        discount *= 0.8
+
+    if payment == PAYMENT_TYPE.CARD_HYUNDAI.value:
+        discount *= 0.6
+    elif payment == PAYMENT_TYPE.CARD_SAMSUNG.value:
+        discount *= 0.5
+    elif payment == PAYMENT_TYPE.DEPOSIT.value or payment == PAYMENT_TYPE.CASH.value:
+        discount *= 0.95
+
+    price *= discount
+    price = round(price)
+
+    # 좌석 예약
+    for seatNo in seatStr.split(','):
+        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, payment,  price, pId, seatNo) == 0:
+            IOManager.printError("Not exist Seat")
+            return
+
+    print("Successfully book a performance")
+
+    # 좌석 수 곱
+    price *= seatCnt
+    discount = 1 - discount
+    discount *= 100
+    strDiscount = str(round(discount))
+    print("Total ticket price is " + str(price) + " (" + strDiscount + "% discount)")
+
+
+# 18번 선택 시 : 가격 정보 포함하여 예매 정보 출력
+def print_ticket_booking_status_and_sales_of_a_performance_extend():
     pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
     re = getPerformanceByID(pId)
     assign = re[0]['CONCERT_HALL_ID']
