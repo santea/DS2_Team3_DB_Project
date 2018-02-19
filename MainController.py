@@ -256,7 +256,7 @@ def reset_database():
         print("Database is successfully reset")
     return None
 
-# 18번 선택 시 : 공연별 예매 정보 및 가격저옵 출력
+# 18번 선택 시 : 공연별 예매 정보 및 가격정보 출력
 def print_ticket_booking_status_and_sales_of_a_performance():
 
     pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
