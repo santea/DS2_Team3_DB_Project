@@ -20,6 +20,7 @@ class INPUT_TYPE(Enum):
     GENDER = 3
     SEAT = 4
     PAYMENT = 5
+    MENU = 6
 
 # 쿼리 종류  쿼리 추가시 여기와 query.xml에 추가
 class QUERY(Enum):

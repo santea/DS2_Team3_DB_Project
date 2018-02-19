@@ -13,8 +13,8 @@ def main():
     while True:
         try:
             # 메뉴 사용자 input
-            sel = IOManager.getMenuInput()
-            # 사용자 input 한 menu 명의 함수를 실행(띄어쓰기를 '_' 로 변환
+            sel = IOManager.input("\nSelect your action: ", inputType=INPUT_TYPE.MENU)
+            # 사용자 input 한 menu 명의 함수를 실행(함수는 MainController 에 있음 / 띄어쓰기를 '_' 로 변환 & 괄호 삭제)
             funcName = MENU_STRING[sel - 1].replace(" ", "_")
             funcName = funcName.replace("(", "")
             funcName = funcName.replace(")", "")
