@@ -133,7 +133,7 @@ class IOManager:
                 return inStr
         elif inputType == INPUT_TYPE.MENU:
             # input type 이 MENU 인 경우 숫자가 아니거나 MENU 범위 벗어난 경우 Error 출력
-            inTxt = input("")
+            inTxt = input(text)
             try:
                 inNum = int(inTxt)
                 if inNum < 1 or inNum > 18:
