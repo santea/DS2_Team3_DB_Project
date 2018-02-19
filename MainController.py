@@ -256,6 +256,21 @@ def reset_database():
         print("Database is successfully reset")
     return None
 
+# 18번 선택 시 : 공연별 예매 정보 및 가격저옵 출력
+def print_ticket_booking_status_and_sales_of_a_performance():
+
+    pId = IOManager.input("Performance ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+    re = getPerformanceByID(pId)
+    assign = re[0]['CONCERT_HALL_ID']
+
+    if assign is None:
+        IOManager.printError("Not assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        return
+
+    re = DBController.instance().excuteQuery(QUERY.SELECT_TICKET_BOOKING_STATUS, pId)
+    IOManager.printTable(re)
+
+
 
 # 콘서트 정보 가져오고 없으면 에러 발생
 def getPerformanceByID(pId):
