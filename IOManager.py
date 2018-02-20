@@ -141,6 +141,6 @@ class IOManager:
             except:
                 self.printError("Select your action between 1 and 18")
                 # 에러 발생시 다시 입력받도록 함
-                return self.getMenuInput()
+                return self.input(text, inputType=INPUT_TYPE.MENU)
             return inNum
         return None
