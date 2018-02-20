@@ -150,7 +150,7 @@ def assign_a_performance_to_a_building():
 
     # assign된게 없으면 에러 출력
     if assign is not None:
-        IOManager.printError("Already assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        IOManager.printError("Already assigned performance (" + str(pId) + " assigned to " + str(assign) + " building)")
         return
 
     # 콘서트홀 존재 유무 확인
