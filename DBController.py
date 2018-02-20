@@ -88,7 +88,7 @@ class DBController:
         tree = parse("query.xml")
         query = tree.getroot()
         element = query.find(queryType.name)
-        # 정의된 쿼리가 없는경우 에러 출력
+        # 정의된 쿼리가 없는 경우 에러 출력
         if element is None or element.text == "":
             IOManager.printError("Can not find " + queryType.name + " from query.xml")
             return None
