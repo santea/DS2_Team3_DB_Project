@@ -75,11 +75,11 @@ class IOManager:
             try:
                 inInt = int(inStr)
                 if inInt < minvalue:
-                    raise ValueError("Please input more then " + str(minvalue) + " integer Value")
+                    raise ValueError("Please input more then " + str(minvalue) + " integer value")
                 return inInt
 
             except Exception:
-                raise ValueError("Please input more then " + str(minvalue) + " integer Value")
+                raise ValueError("Please input more then " + str(minvalue) + " integer value")
         elif inputType == INPUT_TYPE.GENDER:
             # input type 이 GENDER인 경우 m이나 f (대소문자 구분 x) 아닐경우 에러
             inStr = input(text)
@@ -108,7 +108,7 @@ class IOManager:
                         returnStr += ","
 
                 except ValueError:
-                    raise ValueError("Please input more then " + str(minvalue) + " integer Value (Seat Num)")
+                    raise ValueError("Please input more then " + str(minvalue) + " integer value (Seat Num)")
 
             return returnStr, seatCnt
         elif inputType == INPUT_TYPE.PAYMENT:
