@@ -242,10 +242,16 @@ def print_all_performances_which_assigned_at_a_building():
     # 필요 정보 입력
     bId = IOManager.input("Building ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
 
+    # 콘서트 홀(Building) 없는 경우 에러 출력
+    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL_BY_ID, bId)
+    if len(re) == 0:
+        IOManager.printError("Not Exist building")
+        return
+
     # 콘서트 홀(Building), 예약정보 가져와서 출력 / 없는 경우 에러 출력
     re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_BY_HALL_ID, bId)
     if len(re) == 0:
-        IOManager.printError("Not Exist building")
+        IOManager.printError("Building does not assigned yet")
         return
     IOManager.printTable(re)
 
