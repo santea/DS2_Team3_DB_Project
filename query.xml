@@ -45,7 +45,7 @@
     </INSERT_AUDIENCE>
     <DELETE_AUDIENCE>
         update RESERVATION
-        set AUDIENCE_ID = NULL, RESERVATION_YN = 'N'
+        set AUDIENCE_ID = NULL, RESERVATION_YN = 'N', PRICE_PAID = NULL
         where AUDIENCE_ID = %s;
         delete from AUDIENCE
         where ID = %s;
@@ -76,7 +76,7 @@
     </INSERT_RESERVATION>
     <UPDATE_RESERVATION>
         update RESERVATION
-        set RESERVATION_YN = 'Y', AUDIENCE_ID = %s, PAYMENT = '%s', PRICE_PAID = %s
+        set RESERVATION_YN = 'Y', AUDIENCE_ID = %s, PAYMENT = %s, PRICE_PAID = %s
         where CONCERT_ID = %s and SEAT_NO = %s
     </UPDATE_RESERVATION>
     <SELECT_CONCERT_BY_ID>

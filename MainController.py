@@ -226,7 +226,7 @@ def book_a_performance():
     # 좌석 예약
     for seatNo in seatStr.split(','):
         # payment 정보 없으니 NULL로 하여 예약 정보 Update
-        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, 'NULL',  price, pId, seatNo) == 0:
+        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, 'NULL', price, pId, seatNo) == 0:
             IOManager.printError("Not exist Seat")
             return
 
@@ -393,7 +393,7 @@ def book_a_performance_with_a_specific_payment_method_extend():
 
     # 좌석 예약
     for seatNo in seatStr.split(','):
-        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, payment,  price, pId, seatNo) == 0:
+        if DBController.instance().excuteQuery(QUERY.UPDATE_RESERVATION, aId, "'" + payment + "'",  price, pId, seatNo) == 0:
             IOManager.printError("Not exist Seat")
             return
 
