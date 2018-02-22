@@ -45,7 +45,7 @@
     </INSERT_AUDIENCE>
     <DELETE_AUDIENCE>
         update RESERVATION
-        set AUDIENCE_ID = NULL, RESERVATION_YN = 'N', PRICE_PAID = NULL
+        set AUDIENCE_ID = NULL, RESERVATION_YN = 'N', PAYMENT = NULL, PRICE_PAID = NULL
         where AUDIENCE_ID = %s;
         delete from AUDIENCE
         where ID = %s;
