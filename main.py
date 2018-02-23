@@ -6,9 +6,6 @@ def main():
     # 메뉴 출력
     IOManager.printMenu()
 
-    # 참고용 함수
-    #test()
-
     # main loop
     while True:
         try:

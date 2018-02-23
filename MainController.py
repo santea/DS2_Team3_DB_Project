@@ -25,26 +25,6 @@ MENU_STRING = ["print all buildings",
                "print ticket booking status and sales of a performance (extend)"]
 
 
-# 테스트 함수입니다!! 참고용...
-def test():
-    # Constant 파일의 DEBUG모드 있어요! True 하면 쿼리 sql이랑 결과 프린트 하게 해놨어요
-    
-    print()
-    # 파라미터가 0개인 쿼리 수행  query.xml의  SELECT_BUILDING 참고
-    re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT_HALL)
-    # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
-    IOManager.printTable(re)
-
-    print()
-    # 파라미터가 2개인 쿼리 수행  query.xml의  SELECT_PERFORMANCE 참고
-    #re = DBController.instance().excuteQuery(QUERY.SELECT_CONCERT, '1', 1)
-    # 출력은 이렇게... 리턴받은 객체를 넘겨주세요
-    #PrintManager.printTable(re)
-
-    # 에러 출력 예시
-    IOManager.printError("에러는 이렇게 출력하세요")
-
-
 # 1번 선택 시
 def print_all_buildings():
     # 콘서트 홀(Building) 정보 받아와서 출력
@@ -82,6 +62,9 @@ def insert_a_new_building():
 def remove_a_building():
     # 필요 정보 입력
     id = IOManager.input("Building ID: ", inputType=INPUT_TYPE.INT, minvalue=1)
+
+    # Reservation 정보 삭제 쿼리 수행
+    DBController.instance().excuteQuery(QUERY.DELETE_RESERVATION_BY_CONCERTHALL_ID, id, id)
 
     # 콘서트홀 삭제 쿼리 수행 / 적용 컬럼 수가 1인지 비교하여 성공 출력 (빌딩 없는 경우)
     if DBController.instance().excuteQuery(QUERY.DELETE_CONCERT_HALL, id) == 0:
@@ -192,7 +175,7 @@ def book_a_performance():
     price = re[0]['PRICE']
     hallId = re[0]['CONCERT_HALL_ID']
     if hallId is None:
-        IOManager.printError("Not assigned Performance (" + str(aId) + ")")
+        IOManager.printError("Not assigned Performance (" + str(pId) + ")")
         return
 
     # 해당 좌석 예약 여부 확인
@@ -284,7 +267,7 @@ def print_ticket_booking_status_of_a_performance():
 
     # Assign된 공연이 없는 경우
     if assign is None:
-        IOManager.printError("Not assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        IOManager.printError("Not assigned performance (" + str(pId) + ")")
         return
 
     # 예약 정보 쿼리 수행 후 결과 출력
@@ -310,7 +293,8 @@ def reset_database():
         # 테이블이 재생성
         DBController.instance().excuteQuery(QUERY.CREATE_TABLES)
         print("Database is successfully reset")
-    return None
+    else:
+        IOManager.printError("Please input 'Y' to reset database")
 
 
 # 18번 선택 시 : 공연별 예매 정보 및 가격정보 출력
@@ -323,7 +307,7 @@ def print_ticket_booking_status_and_sales_of_a_performance():
     assign = re[0]['CONCERT_HALL_ID']
 
     if assign is None:
-        IOManager.printError("Not assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        IOManager.printError("Not assigned performance (" + str(pId) + ")")
         return
 
     re = DBController.instance().excuteQuery(QUERY.SELECT_TICKET_BOOKING_STATUS, pId)
@@ -354,7 +338,7 @@ def book_a_performance_with_a_specific_payment_method_extend():
     price = re[0]['PRICE']
     hallId = re[0]['CONCERT_HALL_ID']
     if hallId is None:
-        IOManager.printError("Not assigned Performance (" + str(aId) + ")")
+        IOManager.printError("Not assigned Performance (" + str(pId) + ")")
         return
 
     # 해당 좌석 예약 여부 확인
@@ -426,7 +410,7 @@ def print_ticket_booking_status_and_sales_of_a_performance_extend():
     assign = re[0]['CONCERT_HALL_ID']
 
     if assign is None:
-        IOManager.printError("Not assigned performance (" + str(pId) + " > " + str(assign) + ")")
+        IOManager.printError("Not assigned performance (" + str(pId) + ")")
         return
 
     re = DBController.instance().excuteQuery(QUERY.SELECT_TICKET_BOOKING_STATUS, pId)

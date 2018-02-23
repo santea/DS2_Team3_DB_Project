@@ -55,6 +55,15 @@
         set CONCERT_HALL_ID = '%s'
         where ID = '%s'
     </UPDATE_CONCERT_CONCERT_HALL_ID>
+    <DELETE_RESERVATION_BY_CONCERTHALL_ID>
+        delete from RESERVATION
+        where CONCERT_ID IN (select CONCERT_ID
+                             from CONCERT
+                             where CONCERT_HALL_ID = '%s');
+        update CONCERT
+        set CONCERT_HALL_ID = NULL
+        where CONCERT_HALL_ID = '%s'
+    </DELETE_RESERVATION_BY_CONCERTHALL_ID>
     <SELECT_PERFORMANCE>
         select * from CONCERT_HALL
         where ID='%s' and 1 = %s
@@ -137,8 +146,6 @@
         PRIMARY KEY(ID),
         CONSTRAINT CONCERT_CONCERT_HALL_FK FOREIGN KEY (CONCERT_HALL_ID)
             REFERENCES CONCERT_HALL(ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE
         );
 
         create table IF NOT EXISTS AUDIENCE (
@@ -159,8 +166,7 @@
         PRIMARY KEY(CONCERT_ID, SEAT_NO),
         CONSTRAINT RESERVATION_CONCERT_FK FOREIGN KEY (CONCERT_ID)
             REFERENCES CONCERT(ID)
-            ON DELETE CASCADE
-            ON UPDATE CASCADE,
+            ON DELETE CASCADE,
         CONSTRAINT RESERVATION_AUDIENCE_FK FOREIGN KEY (AUDIENCE_ID)
             REFERENCES AUDIENCE(ID)
         );
